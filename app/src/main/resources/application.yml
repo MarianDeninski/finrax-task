@@ -1,3 +1,29 @@
 spring:
   application:
     name: interview-task
+  datasource:
+    url: jdbc:h2:mem:walletdb;DB_CLOSE_DELAY=-1;LOCK_TIMEOUT=10000
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+    hikari:
+      maximum-pool-size: 25
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    open-in-view: false
+  h2:
+    console:
+      enabled: true
+  jackson:
+    serialization:
+      write-bigdecimal-as-plain: true
+
+wallet:
+  withdrawal:
+    scheduler:
+      enabled: true
+
+logging:
+  level:
+    com.finrax.interview_task: INFO
