@@ -1,6 +1,7 @@
 package com.finrax.interview_task.entity;
 
 import com.finrax.interview_task.exception.InsufficientFundsException;
+import com.finrax.interview_task.util.Amounts;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.Version;
 import lombok.Getter;
 
 import java.math.BigDecimal;
@@ -37,7 +39,11 @@ public class Wallet {
     @Column(nullable = false, precision = 38, scale = 18)
     private BigDecimal reserved;
 
+    @Version
+    private Long version;
+
     protected Wallet() {
+        // required by JPA, not an application construction path
     }
 
     public Wallet(String userId, Currency currency, BigDecimal available, BigDecimal reserved) {
@@ -57,8 +63,8 @@ public class Wallet {
 
     public void reserve(BigDecimal amount) {
         if (available.compareTo(amount) < 0) {
-            throw new InsufficientFundsException(
-                    "Wallet [%s/%s] has %s available, cannot reserve %s".formatted(userId, currency, available, amount));
+            throw new InsufficientFundsException("Wallet [%s/%s] has %s available, cannot reserve %s"
+                    .formatted(userId, currency, Amounts.plain(available), Amounts.plain(amount)));
         }
         available = available.subtract(amount);
         reserved = reserved.add(amount);

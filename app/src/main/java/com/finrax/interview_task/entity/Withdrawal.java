@@ -8,13 +8,9 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
-import jakarta.persistence.PostLoad;
-import jakarta.persistence.PostPersist;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
-import lombok.AccessLevel;
+import jakarta.persistence.Version;
 import lombok.Getter;
-import org.springframework.data.domain.Persistable;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -23,7 +19,7 @@ import java.util.UUID;
 @Entity
 @Getter
 @Table(indexes = @Index(name = "idx_withdrawal_status", columnList = "status"))
-public class Withdrawal implements Persistable<UUID> {
+public class Withdrawal {
 
     @Id
     private UUID id;
@@ -44,9 +40,8 @@ public class Withdrawal implements Persistable<UUID> {
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
-    @Transient
-    @Getter(AccessLevel.NONE)
-    private boolean newEntity;
+    @Version
+    private Long version;
 
     protected Withdrawal() {
         // required by JPA, not an application construction path
@@ -59,18 +54,6 @@ public class Withdrawal implements Persistable<UUID> {
         this.amount = amount;
         this.status = WithdrawalStatus.PENDING;
         this.createdAt = Instant.now();
-        this.newEntity = true;
-    }
-
-    @Override
-    public boolean isNew() {
-        return newEntity;
-    }
-
-    @PostPersist
-    @PostLoad
-    void markPersisted() {
-        this.newEntity = false;
     }
 
     public void markProcessing() {

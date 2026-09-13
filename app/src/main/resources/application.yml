@@ -19,11 +19,41 @@ spring:
     serialization:
       write-bigdecimal-as-plain: true
 
+springdoc:
+  override-with-generic-response: false
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+    display-request-duration: true
+  api-docs:
+    path: /v3/api-docs
+
 wallet:
+  demo-data:
+    enabled: true
   withdrawal:
     scheduler:
       enabled: true
 
 logging:
+  pattern:
+    correlation: "[%X{correlationId:-}] "
   level:
     com.finrax.interview_task: INFO
+    org.hibernate.SQL: WARN
+    org.hibernate.orm.jdbc.bind: WARN
+
+---
+spring:
+  config:
+    activate:
+      on-profile: sql
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
+    org.hibernate.orm.jdbc.extract: TRACE
+    org.springframework.orm.jpa: DEBUG
+    org.springframework.transaction: DEBUG
