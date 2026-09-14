@@ -17,3 +17,7 @@ wallet:
   withdrawal:
     scheduler:
       enabled: false
+
+logging:
+  level:
+    org.hibernate.engine.jdbc.spi.SqlExceptionHelper: 'OFF'
