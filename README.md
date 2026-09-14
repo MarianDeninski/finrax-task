@@ -73,6 +73,14 @@ This is only there so the Swagger examples work straight away and the endpoints 
 out, without having to create a wallet and deposit into it first. It can be switched off by setting
 wallet.demo-data.enabled to false, and it is already off while the tests run.
 
+The H2 console is available while the application is running:
+
+http://localhost:8080/h2-console
+
+    JDBC URL:  jdbc:h2:mem:walletdb
+    User Name: sa
+    Password:  (leave empty)
+
 ### Swagger
 
 http://localhost:8080/swagger-ui.html
